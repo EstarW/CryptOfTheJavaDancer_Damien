@@ -23,28 +23,67 @@ import cryptofthejavadancer.Model.Objet.Type_Objet;
 public class IA_dijkstra extends IA{
     
     private Dijkstra algo;
-    private int tour;
-    private boolean enTour;
+    private Entite entite;
+    private boolean mur;
     
     public IA_dijkstra(Entite _entite) {
         super(_entite);
         this.algo=null;
-        this.tour=0;
-        this.enTour=false;
+        this.entite=_entite;
+        this.mur=false;
     }
 
     @Override
     public Type_Action action() {
-        Type_Action retour = Type_Action.attendre;
-        if (this.tour == 0){
-            algo=new Dijkstra(this.getEntite().getMap().getGraphe_complexe());
-            Map map = this.getEntite().getMap();
-            this.algo.calcul(map.getGraphe_complexe().getNoeud(this.getCase()),map.getGraphe_complexe().getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
-            System.out.println(algo.getPath());
+        Type_Action action = Type_Action.attendre;
+        //Calcul Dijkstra
+        this.algo=new Dijkstra(this.getEntite().getMap().getGraphe_complexe());
+        Map map = this.getEntite().getMap();
+        this.algo.calcul(map.getGraphe_complexe().getNoeud(this.getCase()),map.getGraphe_complexe().getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
+        //Affichage du chemin
+        //System.out.println(algo.getPath());
+        
+        if (this.algo.getPath().isEmpty()){
+            action = Type_Action.sortir;
         }
-        return retour;
+        else {
+            action = calculAction(this.algo.getPath().get(0).getCase());
+        }
+        //this.algo.destroy();
+        return action;
     }
     
+    public Type_Action calculAction (Case CaseSuivante){
+        Case caseCadence = this.entite.getCase();
+        Type_Action res = Type_Action.attendre;
+        int X = caseCadence.getLigne();
+        int Y = caseCadence.getColonne();
+        
+        //Si la case suivante est une case Sol
+        if (CaseSuivante.getType() == Type_Case.Sol){
+            //Si la case est vide
+            if (CaseSuivante.getEntite() == null){
+                res=this.directionDeplacement(X,Y,CaseSuivante);
+                this.algo.destroyFirst();
+            }
+            //Si la case est occupée
+            else{
+                res=this.directionInteraction(X, Y, CaseSuivante);
+            }
+        }
+        else if (CaseSuivante.getType() == Type_Case.Mur){
+            if (this.mur==false){
+                res=this.directionInteraction(X, Y, CaseSuivante);
+                this.mur=true;
+            }
+            else{
+                res=this.directionDeplacement(X, Y, CaseSuivante);
+                this.mur=false;
+                this.algo.destroyFirst();
+            }
+        }
+        return res;
+    }
     
     public void plusProcheObjet(Map m){
         Objet_Diamant res;

@@ -40,4 +40,37 @@ public abstract class IA {
     public abstract Type_Action action();
 //------------------------------------------------------------------------------
 
+    public Type_Action directionDeplacement(int X, int Y, Case caseSuivante){
+        Type_Action res=Type_Action.attendre;
+        if (caseSuivante.getLigne() == (X - 1)){
+            res = Type_Action.deplacement_haut;
+        }
+        else if (caseSuivante.getLigne() == (X+1)){
+            res = Type_Action.deplacement_bas;
+        }
+        else if (caseSuivante.getColonne() == (Y-1)){
+            res = Type_Action.deplacement_gauche;
+        }
+        else if (caseSuivante.getColonne() == (Y+1) ){
+            res = Type_Action.deplacement_droite;
+        }
+        return res;
+    }
+    
+    public Type_Action directionInteraction(int X, int Y, Case caseSuivante){
+        Type_Action res = Type_Action.attendre;
+        if (caseSuivante.getLigne() == (X - 1)){
+            res = Type_Action.interagir_haut;
+        }
+        else if (caseSuivante.getLigne() == (X+1)){
+            res = Type_Action.interagir_bas;
+        }
+        else if (caseSuivante.getColonne() == (Y-1)){
+            res = Type_Action.interagir_gauche;
+        }
+        else if (caseSuivante.getColonne() == (Y+1) ){
+            res = Type_Action.interagir_droite;
+        }
+        return res;
+    }
 }

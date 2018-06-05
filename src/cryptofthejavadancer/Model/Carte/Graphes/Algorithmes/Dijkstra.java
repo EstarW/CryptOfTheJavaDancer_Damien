@@ -107,4 +107,12 @@ public class Dijkstra {
         this.path.remove(0);
     }
     
+    public void destroy(){
+        this.graph=null;
+        this.distance.clear();
+        this.visited.clear();
+        this.predecessor.clear();
+        this.path.clear();
+        this.infini = null;
+    }
 }
