@@ -123,4 +123,9 @@ public class Astar {
         this.path.clear();
         this.infini = null;
     }
+
+    public Graphe getGraph() {
+        return graph;
+    }
+    
 }

@@ -10,6 +10,8 @@ import cryptofthejavadancer.Model.Carte.Cases.Case_Sol;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Astar;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Dijkstra;
+import cryptofthejavadancer.Model.Carte.Graphes.CoupleNoeud;
+import cryptofthejavadancer.Model.Carte.Graphes.Noeud;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
 import cryptofthejavadancer.Model.Entites.Type_Entite;
@@ -72,6 +74,7 @@ public class IA_Astar extends IA{
                 res=this.directionInteraction(X, Y, CaseSuivante);
             }
         }
+        
         else if (CaseSuivante.getType() == Type_Case.Mur){
             if (this.mur==false){
                 res=this.directionInteraction(X, Y, CaseSuivante);
@@ -83,6 +86,19 @@ public class IA_Astar extends IA{
                 this.astar.destroyFirst();
             }
         }
+        /*
+        else if (CaseSuivante.getType() == Type_Case.Mur){
+            res=this.directionInteraction(X, Y, CaseSuivante);
+            //Si on creuse un mur, on change le type de la case dans le graphe
+            for (Noeud v : this.astar.getGraph().getNoeuds().values()){
+                if (v.getVoisins().contains(this.astar.getGraph().getNoeud(CaseSuivante))){
+                    CoupleNoeud vC = new CoupleNoeud(v,this.astar.getGraph().getNoeud(CaseSuivante));
+                    this.astar.getGraph().getLabels().put(vC, 1);
+                }
+            }
+            astar.getGraph().getNoeuds().put(new Case_Sol(CaseSuivante.getLigne(), CaseSuivante.getColonne(),this.getMap()), astar.getGraph().getNoeud(CaseSuivante));
+        }
+        */
         return res;
     }
 }
