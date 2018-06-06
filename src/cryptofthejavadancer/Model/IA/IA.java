@@ -1,6 +1,7 @@
 package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
+import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
 
@@ -70,6 +71,9 @@ public abstract class IA {
         }
         else if (caseSuivante.getColonne() == (Y+1) ){
             res = Type_Action.interagir_droite;
+        }
+        if (caseSuivante.getType()==Type_Case.Mur){
+            
         }
         return res;
     }

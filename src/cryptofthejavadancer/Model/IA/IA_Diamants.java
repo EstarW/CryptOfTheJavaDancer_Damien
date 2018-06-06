@@ -6,13 +6,10 @@
 package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
-import cryptofthejavadancer.Model.Carte.Cases.Case_Sol;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
-import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Astar;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Dijkstra;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
-import cryptofthejavadancer.Model.Entites.Type_Entite;
 import cryptofthejavadancer.Model.Objet.Objet;
 import cryptofthejavadancer.Model.Objet.Objet_Diamant;
 import cryptofthejavadancer.Model.Objet.Type_Objet;
@@ -21,43 +18,35 @@ import cryptofthejavadancer.Model.Objet.Type_Objet;
  *
  * @author dj715494
  */
-public class IA_dijkstra extends IA{
+public class IA_Diamants extends IA{
     
-    private Dijkstra algo;
-    private Entite entite;
+    private Dijkstra dijkstra;
     private boolean mur;
-    
-    public IA_dijkstra(Entite _entite) {
-        super(_entite);
-        this.algo=null;
-        this.entite=_entite;
-        this.mur=false;
-    }
 
+    public IA_Diamants(Entite _entite) {
+        super(_entite);
+        dijkstra=null;
+        mur=false;
+    }
+    
+    public void plusProcheObjet(Map m){
+        Objet_Diamant res;
+        for(Objet o:m.getListeObjet()){
+            if(o.getType()==Type_Objet.Diamant){
+                this.dijkstra=new Dijkstra(m.getGraphe_complexe());
+                this.dijkstra.calcul(m.getGraphe_complexe().getNoeud(this.getCase()), m.getGraphe_complexe().getNoeud(o.getCase()));
+                
+            }
+        }
+    }
+    
     @Override
     public Type_Action action() {
-        Type_Action action = Type_Action.attendre;
-        //Calcul Dijkstra
-        if(this.algo == null) {
-            this.algo=new Dijkstra(this.getEntite().getMap().getGraphe_complexe());
-        }
-        Map map = this.getEntite().getMap();
-        if (this.algo.getPath().isEmpty()){
-            if (this.entite.getCase() == map.getCase(map.getSortie().getLigne(), map.getSortie().getColonne())){
-                action = Type_Action.sortir;
-            }
-            else{
-                this.algo.calcul(map.getGraphe_complexe().getNoeud(this.getCase()),map.getGraphe_complexe().getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
-            }
-        }
-        else {
-            action = calculAction(this.algo.getPath().get(0).getCase());
-        }
-        return action;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     public Type_Action calculAction (Case CaseSuivante){
-        Case caseCadence = this.entite.getCase();
+        Case caseCadence = this.getEntite().getCase();
         Type_Action res = Type_Action.attendre;
         int X = caseCadence.getLigne();
         int Y = caseCadence.getColonne();
@@ -67,7 +56,7 @@ public class IA_dijkstra extends IA{
             //Si la case est vide
             if (CaseSuivante.getEntite() == null){
                 res=this.directionDeplacement(X,Y,CaseSuivante);
-                this.algo.destroyFirst();
+                this.dijkstra.destroyFirst();
             }
             //Si la case est occupée
             else{
@@ -82,11 +71,10 @@ public class IA_dijkstra extends IA{
             else{
                 res=this.directionDeplacement(X, Y, CaseSuivante);
                 this.mur=false;
-                this.algo.destroyFirst();
+                this.dijkstra.destroyFirst();
             }
         }
         return res;
     }
-    
     
 }
