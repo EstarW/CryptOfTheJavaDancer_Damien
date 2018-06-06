@@ -31,4 +31,9 @@ public class Noeud {
     public Case getCase(){
         return c;
     }
+    
+    @Override
+    public String toString(){
+        return "["+this.c.getLigne()+","+this.c.getColonne()+"]";
+    }
 }

@@ -19,17 +19,17 @@ import java.util.ArrayList;
 
 /**
  *
- * @author dj715494
+ * @author Damien
  */
-public class IA_Diamants extends IA{
+public class IA_Diamant_Complexe extends IA{
     
     private Astar algo;
     private boolean mur;
     private ArrayList<Objet> diamants;
     private boolean tourUn;
     private Graphe graphe;
-
-    public IA_Diamants(Entite _entite) {
+    
+    public IA_Diamant_Complexe(Entite _entite) {
         super(_entite);
         algo=null;
         mur=false;
@@ -61,7 +61,7 @@ public class IA_Diamants extends IA{
         if (tourUn){
             //Génération de la liste des diamants
             diamants=new ArrayList<Objet>();
-            graphe=map.getGrapheSimple();
+            graphe=map.getGraphe_complexe();
             for(Objet o : map.getListeObjet()){
                 if (o.getType()==Type_Objet.Diamant){
                     diamants.add(o);
@@ -137,5 +137,4 @@ public class IA_Diamants extends IA{
         }
         return res;
     }
-    
 }

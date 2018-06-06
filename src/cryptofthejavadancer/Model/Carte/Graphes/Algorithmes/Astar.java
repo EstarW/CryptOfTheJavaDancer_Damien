@@ -76,7 +76,7 @@ public class Astar {
             v = predecessor.get(v);
         }
         path.remove(0);
-        System.out.println(path);
+        //System.out.println(path);
     }
             
     public void relaxing(Noeud a, Noeud b){
