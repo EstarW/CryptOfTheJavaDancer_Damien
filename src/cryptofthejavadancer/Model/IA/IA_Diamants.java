@@ -7,6 +7,7 @@ package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
+import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Astar;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Dijkstra;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
@@ -20,22 +21,23 @@ import cryptofthejavadancer.Model.Objet.Type_Objet;
  */
 public class IA_Diamants extends IA{
     
-    private Dijkstra dijkstra;
+    private Astar algo;
     private boolean mur;
 
     public IA_Diamants(Entite _entite) {
         super(_entite);
-        dijkstra=null;
+        algo=null;
         mur=false;
     }
     
     public void plusProcheObjet(Map m){
-        Objet_Diamant res;
+        Objet_Diamant res=null;
+        int min;
         for(Objet o:m.getListeObjet()){
-            if(o.getType()==Type_Objet.Diamant){
-                this.dijkstra=new Dijkstra(m.getGraphe_complexe());
-                this.dijkstra.calcul(m.getGraphe_complexe().getNoeud(this.getCase()), m.getGraphe_complexe().getNoeud(o.getCase()));
-                
+            if(o.getType()==res.getType()){
+                this.algo=new Astar(m.getGraphe_complexe());
+                this.algo.calcul(m.getGraphe_complexe().getNoeud(this.getCase()), m.getGraphe_complexe().getNoeud(o.getCase()));
+                min=algo.getPath().size();
             }
         }
     }
@@ -56,7 +58,7 @@ public class IA_Diamants extends IA{
             //Si la case est vide
             if (CaseSuivante.getEntite() == null){
                 res=this.directionDeplacement(X,Y,CaseSuivante);
-                this.dijkstra.destroyFirst();
+                this.algo.destroyFirst();
             }
             //Si la case est occupée
             else{
@@ -71,7 +73,7 @@ public class IA_Diamants extends IA{
             else{
                 res=this.directionDeplacement(X, Y, CaseSuivante);
                 this.mur=false;
-                this.dijkstra.destroyFirst();
+                this.algo.destroyFirst();
             }
         }
         return res;

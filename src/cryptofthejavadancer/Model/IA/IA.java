@@ -2,6 +2,7 @@ package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
+import cryptofthejavadancer.Model.Carte.Graphes.Noeud;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
 
@@ -73,7 +74,12 @@ public abstract class IA {
             res = Type_Action.interagir_droite;
         }
         if (caseSuivante.getType()==Type_Case.Mur){
-            
+            Noeud n = this.getMap().getGraphe_complexe().getNoeud(caseSuivante);
+            for (Noeud v : this.getMap().getGraphe_complexe().getNoeuds().values()){
+                if (n.getVoisins().contains(v)){
+                    this.getMap().getGraphe_complexe().setLabel(v, n, 1);
+                }
+            }
         }
         return res;
     }

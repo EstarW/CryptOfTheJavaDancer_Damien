@@ -59,4 +59,5 @@ public class Graphe {
     public HashMap<Case, Noeud> getNoeuds() {
         return Noeuds;
     }
+    
 }
