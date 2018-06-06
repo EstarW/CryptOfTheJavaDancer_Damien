@@ -7,6 +7,7 @@ import cryptofthejavadancer.IHM.Son.Lecteur;
 import cryptofthejavadancer.Model.Carte.Cases.Case;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Coordonnees;
+import cryptofthejavadancer.Model.IA.IA_Astar;
 import cryptofthejavadancer.Model.IA.IA_Immobile;
 import cryptofthejavadancer.Model.IA.IA_droite;
 import cryptofthejavadancer.Model.IA.IA_dijkstra;

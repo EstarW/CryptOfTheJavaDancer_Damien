@@ -21,43 +21,36 @@ import cryptofthejavadancer.Model.Objet.Type_Objet;
  *
  * @author dj715494
  */
-public class IA_dijkstra extends IA{
-    
-    private Dijkstra algo;
+public class IA_Astar extends IA{
     private Astar astar;
     private Entite entite;
     private boolean mur;
     
-    public IA_dijkstra(Entite _entite) {
+    public IA_Astar(Entite _entite) {
         super(_entite);
-        this.algo=null;
+        this.astar=null;
         this.entite=_entite;
         this.mur=false;
     }
-
     @Override
     public Type_Action action() {
         Type_Action action = Type_Action.attendre;
         //Calcul Dijkstra
-        if(this.algo == null) {
-            //this.algo=new Dijkstra(this.getEntite().getMap().getGraphe_complexe());
+        if(this.astar == null) {
             this.astar=new Astar(this.getEntite().getMap().getGraphe_complexe());
         }
         Map map = this.getEntite().getMap();
-        if (this.algo.getPath().isEmpty()){
+        if (this.astar.getPath().isEmpty()){
             if (this.entite.getCase() == map.getCase(map.getSortie().getLigne(), map.getSortie().getColonne())){
                 action = Type_Action.sortir;
             }
             else{
-                //this.algo.calcul(map.getGraphe_complexe().getNoeud(this.getCase()),map.getGraphe_complexe().getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
                 this.astar.calcul(map.getGraphe_complexe().getNoeud(this.getCase()),map.getGraphe_complexe().getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
             }
         }
         else {
-            //action = calculAction(this.algo.getPath().get(0).getCase());
             action = calculAction(this.astar.getPath().get(0).getCase());
         }
-        //this.algo.destroy();
         return action;
     }
     
@@ -72,7 +65,7 @@ public class IA_dijkstra extends IA{
             //Si la case est vide
             if (CaseSuivante.getEntite() == null){
                 res=this.directionDeplacement(X,Y,CaseSuivante);
-                this.algo.destroyFirst();
+                this.astar.destroyFirst();
             }
             //Si la case est occupée
             else{
@@ -87,20 +80,9 @@ public class IA_dijkstra extends IA{
             else{
                 res=this.directionDeplacement(X, Y, CaseSuivante);
                 this.mur=false;
-                this.algo.destroyFirst();
+                this.astar.destroyFirst();
             }
         }
         return res;
-    }
-    
-    public void plusProcheObjet(Map m){
-        Objet_Diamant res;
-        for(Objet o:m.getListeObjet()){
-            if(o.getType()==Type_Objet.Diamant){
-                this.algo=new Dijkstra(m.getGraphe_complexe());
-                this.algo.calcul(m.getGraphe_complexe().getNoeud(this.getCase()), m.getGraphe_complexe().getNoeud(o.getCase()));
-                
-            }
-        }
     }
 }
