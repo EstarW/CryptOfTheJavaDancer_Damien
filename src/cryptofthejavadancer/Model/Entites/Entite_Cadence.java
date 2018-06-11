@@ -35,7 +35,7 @@ public class Entite_Cadence extends Entite {
         //Fixe le nb de pv
         super(3);         
         //Fixe l'IA de Cadence
-        this.setIA(new IA_Diamants(this));
+        this.setIA(new IA_Diamant_Complexe(this));
         //Initialisation
         this.nombreDiamant = 0;
         this.nombrePieceOr = 0;

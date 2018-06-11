@@ -128,4 +128,18 @@ public class Astar {
         return graph;
     }
     
+    public int taillePath(Noeud n){
+        return distance.get(n);
+    }
+
+    public HashMap<Noeud, Integer> getDistance() {
+        return distance;
+    }
+
+    public void setGraph(Graphe graph) {
+        this.graph = graph;
+    }
+    
+    
+    
 }
