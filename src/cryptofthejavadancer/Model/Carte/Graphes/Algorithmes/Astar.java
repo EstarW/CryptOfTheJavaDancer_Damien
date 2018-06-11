@@ -129,6 +129,7 @@ public class Astar {
     }
     
     public int taillePath(Noeud n){
+        //System.out.println(this.distance.get(n));
         return this.distance.get(n);
     }
 

@@ -69,6 +69,7 @@ public class IA_Diamant_Complexe extends IA{
                     pelle=o;
                 }
             }
+            //System.out.println(pelle.getCase());
             //Génération de l'algo
             this.dijkstraSimple=new Dijkstra(grapheSimple);
             this.dijkstraComplexe=new Dijkstra(grapheComplexe);
@@ -88,8 +89,8 @@ public class IA_Diamant_Complexe extends IA{
                     action=Type_Action.ramasser;
                     hasPelle=true;
                     astar.setGraph(grapheComplexe);
-                    System.out.println("pelle ramassée");
-                    System.out.println(astar.getPath());
+                    //System.out.println("pelle ramassée");
+                    //System.out.println(astar.getPath());
                 }
                 if (this.getCase().getObjet().getType()==Type_Objet.Sortie){
                     action=Type_Action.sortir;
@@ -101,6 +102,7 @@ public class IA_Diamant_Complexe extends IA{
         else{
             action = calculAction(astar.getPath().get(0).getCase());
         }
+        //System.out.println(astar.getPath());
         return action;
     }
     
@@ -193,27 +195,29 @@ public class IA_Diamant_Complexe extends IA{
                 }
                 else{
                     int distCadDiam = dijkstraSimple.taillePath(grapheSimple.getNoeud(o.getCase()));
-                    System.out.println("distCadDiam "+distCadDiam);
-                    astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(pelle.getCase()));
+                    //System.out.println("distCadDiam "+distCadDiam);
+                    Astar astarPelle = new Astar(grapheSimple);
+                    astarPelle.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(pelle.getCase()));
                     //System.out.println(astar.getPath());
                     //System.out.println(astar.getDistance());
-                    int distCadPelle = astar.taillePath(grapheComplexe.getNoeud(pelle.getCase()));
-                    System.out.println("distCadPelle "+distCadPelle);
+                    //System.out.println(grapheSimple.getNoeud(pelle.getCase()));
+                    int distCadPelle = astarPelle.taillePath(grapheSimple.getNoeud(pelle.getCase()));
+                    //System.out.println("distCadPelle "+distCadPelle);
                     dijkstraComplexe.calcul(grapheComplexe.getNoeud(pelle.getCase()), grapheComplexe.getNoeud(o.getCase()));
                     int distPelleDiam = dijkstraComplexe.taillePath(grapheComplexe.getNoeud(o.getCase()));
-                    System.out.println("distPelleDiam "+distPelleDiam);
+                    //System.out.println("distPelleDiam "+distPelleDiam);
                     if (distCadDiam<distCadPelle+distPelleDiam && distCadDiam!=0 && distCadPelle+distPelleDiam!=0){
                         if (distCadDiam<dist){
                             dist=distCadDiam;
                             dest=o.getCase();
-                            System.out.println("dest diam");
+                            //System.out.println("dest diam");
                         }
                     }
                     else{
                         if (distCadPelle+distPelleDiam<dist){
                             dist=distCadPelle+distPelleDiam;
                             dest=pelle.getCase();
-                            System.out.println("dest pelle");
+                            //System.out.println("dest pelle");
                         }
                     }
                 }
@@ -228,14 +232,6 @@ public class IA_Diamant_Complexe extends IA{
         }
         else{
             astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(dest));
-        }
-        
-        
-        if (dest.getObjet().getType()==Type_Objet.Diamant){
-            System.out.println("dest diam final");
-        }
-        if (dest.getObjet().getType()==Type_Objet.Pelle){
-            System.out.println("dest pelle final");
         }
     }
 }
