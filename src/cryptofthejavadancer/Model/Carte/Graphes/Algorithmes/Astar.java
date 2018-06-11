@@ -129,7 +129,7 @@ public class Astar {
     }
     
     public int taillePath(Noeud n){
-        return distance.get(n);
+        return this.distance.get(n);
     }
 
     public HashMap<Noeud, Integer> getDistance() {

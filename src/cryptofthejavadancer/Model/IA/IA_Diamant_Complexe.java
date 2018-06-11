@@ -193,22 +193,27 @@ public class IA_Diamant_Complexe extends IA{
                 }
                 else{
                     int distCadDiam = dijkstraSimple.taillePath(grapheSimple.getNoeud(o.getCase()));
+                    System.out.println("distCadDiam "+distCadDiam);
                     astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(pelle.getCase()));
                     //System.out.println(astar.getPath());
                     //System.out.println(astar.getDistance());
                     int distCadPelle = astar.taillePath(grapheComplexe.getNoeud(pelle.getCase()));
+                    System.out.println("distCadPelle "+distCadPelle);
                     dijkstraComplexe.calcul(grapheComplexe.getNoeud(pelle.getCase()), grapheComplexe.getNoeud(o.getCase()));
                     int distPelleDiam = dijkstraComplexe.taillePath(grapheComplexe.getNoeud(o.getCase()));
+                    System.out.println("distPelleDiam "+distPelleDiam);
                     if (distCadDiam<distCadPelle+distPelleDiam && distCadDiam!=0 && distCadPelle+distPelleDiam!=0){
                         if (distCadDiam<dist){
                             dist=distCadDiam;
                             dest=o.getCase();
+                            System.out.println("dest diam");
                         }
                     }
                     else{
                         if (distCadPelle+distPelleDiam<dist){
                             dist=distCadPelle+distPelleDiam;
                             dest=pelle.getCase();
+                            System.out.println("dest pelle");
                         }
                     }
                 }
@@ -223,6 +228,14 @@ public class IA_Diamant_Complexe extends IA{
         }
         else{
             astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(dest));
+        }
+        
+        
+        if (dest.getObjet().getType()==Type_Objet.Diamant){
+            System.out.println("dest diam final");
+        }
+        if (dest.getObjet().getType()==Type_Objet.Pelle){
+            System.out.println("dest pelle final");
         }
     }
 }
