@@ -27,7 +27,10 @@ public class IA_Diamant_Complexe extends IA{
     private boolean mur;
     private ArrayList<Objet> diamants;
     private boolean tourUn;
-    private Graphe graphe;
+    private Graphe graphe_simple;
+    private Graphe graphe_complexe;
+    private Objet pelle;
+    private boolean hasPelle;
     
     public IA_Diamant_Complexe(Entite _entite) {
         super(_entite);
@@ -35,20 +38,44 @@ public class IA_Diamant_Complexe extends IA{
         mur=false;
         diamants = null;
         tourUn=true;
-        graphe=null;
+        graphe_simple=null;
+        graphe_complexe=null;
     }
     
-    public Objet plusProcheDiamant(Map m){
+    public Objet plusProcheObjet(Map m){
         Objet res=null;
-        Astar algoDiamant = new Astar(graphe);
+        Astar algoDiamant = new Astar(graphe_simple);
         int min = algoDiamant.getInfini();
         int dist;
         for(Objet o:diamants){
-            algoDiamant.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(o.getCase()));
-            dist=algoDiamant.getPath().size();
-            if (dist<min && dist!=0){
-                res=o;
-                min=dist;
+            if (hasPelle){
+                algoDiamant.calcul(graphe_complexe.getNoeud(this.getCase()), graphe_complexe.getNoeud(o.getCase()));
+                dist=algoDiamant.getPath().size();
+                if (dist<min && dist!=0){
+                    res=o;
+                    min=dist;
+                }
+            }
+            else{
+                int distPelle;
+                algoDiamant.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(o.getCase()));
+                dist=algoDiamant.getPath().size();
+                Astar algoPelle = new Astar(graphe_simple);
+                algoPelle.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(pelle.getCase()));
+                distPelle=algoPelle.getPath().size();
+                Astar algoPelleDiam = new Astar(graphe_simple);
+                algoPelleDiam.calcul(graphe_complexe.getNoeud(pelle.getCase()), graphe_complexe.getNoeud(o.getCase()));
+                distPelle+=algoPelleDiam.getPath().size();
+                if (distPelle<dist){
+                    dist=distPelle;
+                    res=pelle;
+                    System.out.println("Pelle");
+                }
+                else{
+                    res=o;
+                    min=dist;
+                    System.out.println("Diam");
+                }
             }
         }
         return res;
@@ -61,37 +88,47 @@ public class IA_Diamant_Complexe extends IA{
         if (tourUn){
             //Génération de la liste des diamants
             diamants=new ArrayList<Objet>();
-            graphe=map.getGraphe_complexe();
+            graphe_simple=map.getGrapheSimple();
+            hasPelle=false;
             for(Objet o : map.getListeObjet()){
                 if (o.getType()==Type_Objet.Diamant){
                     diamants.add(o);
                 }
+                if (o.getType()==Type_Objet.Pelle){
+                    pelle=o;
+                }
             }
             //Génération de l'algo
-            this.algo=new Astar(graphe);
+            this.algo=new Astar(graphe_simple);
             
             if (!diamants.isEmpty()){
-                algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(plusProcheDiamant(map).getCase()));
+                algo.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(plusProcheObjet(map).getCase()));
                 //System.out.println(algo.getPath());
-                diamants.remove(plusProcheDiamant(map));
+                diamants.remove(plusProcheObjet(map));
             }
             else{
-                algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
+                algo.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
                 //System.out.println(algo.getPath());
             }
             tourUn=false;
         }
         
         if (this.getEntite().getCase().getObjet()!=null){
-            if (this.getEntite().getCase().getObjet().getType()==Type_Objet.Diamant){
+            if (this.getEntite().getCase().getObjet().getType()==Type_Objet.Diamant || this.getEntite().getCase().getObjet().getType()==Type_Objet.Pelle){
+                
                 action=Type_Action.ramasser;
+                if (this.getEntite().getCase().getObjet().getType()==Type_Objet.Pelle){
+                    graphe_simple=graphe_complexe;
+                    hasPelle=true;
+                    pelle=null;
+                }
                 if (!diamants.isEmpty()){
-                    algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(plusProcheDiamant(map).getCase()));
+                    algo.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(plusProcheObjet(map).getCase()));
                     //System.out.println(algo.getPath());
-                    diamants.remove(plusProcheDiamant(map));
+                    diamants.remove(plusProcheObjet(map));
                 }
                 else{
-                    algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
+                    algo.calcul(graphe_simple.getNoeud(this.getCase()), graphe_simple.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
                     //System.out.println(algo.getPath());
                 }
             }
