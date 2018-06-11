@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class IA_Diamants extends IA{
     
     private Dijkstra algo;
+    private Astar astar;
     private boolean mur;
     private ArrayList<Objet> diamants;
     private boolean tourUn;
@@ -37,27 +38,13 @@ public class IA_Diamants extends IA{
         diamants = null;
         tourUn=true;
         grapheSimple=null;
-    }
-    
-    public Objet plusProcheDiamant(Map m){
-        Objet res=null;
-        Astar algoDiamant = new Astar(grapheSimple);
-        int min = algoDiamant.getInfini();
-        int dist;
-        for(Objet o:diamants){
-            algoDiamant.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(o.getCase()));
-            dist=algoDiamant.getPath().size();
-            if (dist<min && dist!=0){
-                res=o;
-                min=dist;
-            }
-        }
-        return res;
+        astar=null;
     }
     
     @Override
     public Type_Action action() {
         Type_Action action = Type_Action.attendre;
+        Case dest=this.getCase();
         if (tourUn){
             map = this.getEntite().getMap();
             //Génération de la liste des diamants
@@ -70,11 +57,34 @@ public class IA_Diamants extends IA{
             }
             //Génération de l'algo
             this.algo=new Dijkstra(grapheSimple);
-            algo.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud());
+            astar=new Astar(grapheSimple);
+            algo.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(map.caseSortie()));
             tourUn=false;
         }
-        if ()
-        
+        if (astar.getPath().isEmpty()){
+            
+        //Si il y a un diamant accessible on récupère le plus proche
+        boolean diamAcc=false;
+        for (Objet o : diamants){
+            if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))!=0){
+                diamAcc=true;
+            }
+        }
+        if (diamAcc){
+            int dist=algo.getInfini()+1;
+            for (Objet o : diamants){
+                if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))<dist && algo.taillePath(grapheSimple.getNoeud(o.getCase()))!=0){
+                    dist=algo.taillePath(grapheSimple.getNoeud(o.getCase()));
+                    dest=o.getCase();
+                }
+            }
+        }
+        else{
+            dest=map.caseSortie();
+        }
+        astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(dest));
+        }
+        action = calculAction(astar.getPath().get(0).getCase());
         return action;
     }
     
@@ -89,7 +99,7 @@ public class IA_Diamants extends IA{
             //Si la case est vide
             if (CaseSuivante.getEntite() == null){
                 res=this.directionDeplacement(X,Y,CaseSuivante);
-                this.algo.destroyFirst();
+                this.astar.destroyFirst();
             }
             //Si la case est occupée
             else{
@@ -104,7 +114,7 @@ public class IA_Diamants extends IA{
             else{
                 res=this.directionDeplacement(X, Y, CaseSuivante);
                 this.mur=false;
-                this.algo.destroyFirst();
+                this.astar.destroyFirst();
             }
         }
         return res;

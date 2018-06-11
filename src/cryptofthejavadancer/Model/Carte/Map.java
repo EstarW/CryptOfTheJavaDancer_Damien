@@ -235,6 +235,10 @@ public class Map {
         
     }
     
+    public Case caseSortie(){
+        return this.getCase(this.fin.getLigne(), this.fin.getColonne());
+    }
+    
 //------------------------------------------------------------------------------
 
 }

@@ -115,4 +115,8 @@ public class Dijkstra {
         this.path.clear();
         this.infini = null;
     }
+    
+    public int taillePath(Noeud n){
+        return distance.get(n);
+    }
 }
