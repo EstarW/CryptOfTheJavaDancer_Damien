@@ -23,11 +23,12 @@ import java.util.ArrayList;
  */
 public class IA_Diamants extends IA{
     
-    private Astar algo;
+    private Dijkstra algo;
     private boolean mur;
     private ArrayList<Objet> diamants;
     private boolean tourUn;
-    private Graphe graphe;
+    private Graphe grapheSimple;
+    private Map map;
 
     public IA_Diamants(Entite _entite) {
         super(_entite);
@@ -35,16 +36,16 @@ public class IA_Diamants extends IA{
         mur=false;
         diamants = null;
         tourUn=true;
-        graphe=null;
+        grapheSimple=null;
     }
     
     public Objet plusProcheDiamant(Map m){
         Objet res=null;
-        Astar algoDiamant = new Astar(graphe);
+        Astar algoDiamant = new Astar(grapheSimple);
         int min = algoDiamant.getInfini();
         int dist;
         for(Objet o:diamants){
-            algoDiamant.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(o.getCase()));
+            algoDiamant.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(o.getCase()));
             dist=algoDiamant.getPath().size();
             if (dist<min && dist!=0){
                 res=o;
@@ -57,52 +58,23 @@ public class IA_Diamants extends IA{
     @Override
     public Type_Action action() {
         Type_Action action = Type_Action.attendre;
-        Map map = this.getEntite().getMap();
         if (tourUn){
+            map = this.getEntite().getMap();
             //Génération de la liste des diamants
             diamants=new ArrayList<Objet>();
-            graphe=map.getGrapheSimple();
+            grapheSimple=map.getGrapheSimple();
             for(Objet o : map.getListeObjet()){
                 if (o.getType()==Type_Objet.Diamant){
                     diamants.add(o);
                 }
             }
             //Génération de l'algo
-            this.algo=new Astar(graphe);
-            
-            if (!diamants.isEmpty()){
-                algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(plusProcheDiamant(map).getCase()));
-                //System.out.println(algo.getPath());
-                diamants.remove(plusProcheDiamant(map));
-            }
-            else{
-                algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
-                //System.out.println(algo.getPath());
-            }
+            this.algo=new Dijkstra(grapheSimple);
+            algo.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud());
             tourUn=false;
         }
+        if ()
         
-        if (this.getEntite().getCase().getObjet()!=null){
-            if (this.getEntite().getCase().getObjet().getType()==Type_Objet.Diamant){
-                action=Type_Action.ramasser;
-                if (!diamants.isEmpty()){
-                    algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(plusProcheDiamant(map).getCase()));
-                    //System.out.println(algo.getPath());
-                    diamants.remove(plusProcheDiamant(map));
-                }
-                else{
-                    algo.calcul(graphe.getNoeud(this.getCase()), graphe.getNoeud(map.getCase(map.getSortie().getLigne(),map.getSortie().getColonne())));
-                    //System.out.println(algo.getPath());
-                }
-            }
-            else if(this.getEntite().getCase().getObjet().getType()==Type_Objet.Sortie){
-                action=Type_Action.sortir;
-            }
-        }
-        else{
-            action=calculAction(this.algo.getPath().get(0).getCase());
-            //System.out.println(algo.getPath());
-        }
         return action;
     }
     
