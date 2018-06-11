@@ -31,6 +31,10 @@ public class Noeud {
     public Case getCase(){
         return c;
     }
+
+    public void setC(Case c) {
+        this.c = c;
+    }
     
     @Override
     public String toString(){

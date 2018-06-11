@@ -6,10 +6,13 @@
 package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
+import cryptofthejavadancer.Model.Carte.Cases.Case_Sol;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Astar;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Dijkstra;
+import cryptofthejavadancer.Model.Carte.Graphes.CoupleNoeud;
 import cryptofthejavadancer.Model.Carte.Graphes.Graphe;
+import cryptofthejavadancer.Model.Carte.Graphes.Noeud;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
 import cryptofthejavadancer.Model.Objet.Objet;
@@ -61,30 +64,23 @@ public class IA_Diamants extends IA{
             algo.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(map.caseSortie()));
             tourUn=false;
         }
-        if (astar.getPath().isEmpty()){
-            
-        //Si il y a un diamant accessible on récupère le plus proche
-        boolean diamAcc=false;
-        for (Objet o : diamants){
-            if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))!=0){
-                diamAcc=true;
-            }
-        }
-        if (diamAcc){
-            int dist=algo.getInfini()+1;
-            for (Objet o : diamants){
-                if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))<dist && algo.taillePath(grapheSimple.getNoeud(o.getCase()))!=0){
-                    dist=algo.taillePath(grapheSimple.getNoeud(o.getCase()));
-                    dest=o.getCase();
+        if (astar.getPath().isEmpty()){  
+            //Interaction
+            if (this.getCase().getObjet()!=null){
+                if (this.getCase().getObjet().getType()==Type_Objet.Diamant){
+                    action=Type_Action.ramasser;
+                    diamants.remove(this.getCase().getObjet());
+                }
+                if (this.getCase().getObjet().getType()==Type_Objet.Sortie){
+                    action=Type_Action.sortir;
                 }
             }
+            //Si il y a un diamant accessible on récupère le plus proche
+            dest=this.calculDest();
         }
         else{
-            dest=map.caseSortie();
+            action = calculAction(astar.getPath().get(0).getCase());
         }
-        astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(dest));
-        }
-        action = calculAction(astar.getPath().get(0).getCase());
         return action;
     }
     
@@ -107,17 +103,43 @@ public class IA_Diamants extends IA{
             }
         }
         else if (CaseSuivante.getType() == Type_Case.Mur){
-            if (this.mur==false){
-                res=this.directionInteraction(X, Y, CaseSuivante);
-                this.mur=true;
-            }
-            else{
-                res=this.directionDeplacement(X, Y, CaseSuivante);
-                this.mur=false;
-                this.astar.destroyFirst();
-            }
+            res=this.directionInteraction(X, Y, CaseSuivante);
+            for(Noeud v : grapheSimple.getNoeuds().values()){
+                        if (v.getVoisins().contains(grapheSimple.getNoeud(CaseSuivante))){
+                            CoupleNoeud vC = new CoupleNoeud(v,grapheSimple.getNoeud(CaseSuivante));
+                            grapheSimple.getLabels().replace(vC,2,1);
+                        }
+                    }
+                Case test = new Case_Sol(CaseSuivante.getLigne(),CaseSuivante.getColonne(),getMap());
+                Noeud v = grapheSimple.getNoeud(CaseSuivante);
+                v.setC(test);
+                grapheSimple.getNoeuds().remove(CaseSuivante,v);
+                grapheSimple.getNoeuds().put(test,v);
         }
         return res;
     }
     
+    public Case calculDest(){
+        Case dest=this.getCase();
+        boolean diamAcc=false;
+        for (Objet o : diamants){
+            if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))<algo.getInfini()){
+                diamAcc=true;
+            }
+        }
+        if (diamAcc){
+            int dist=algo.getInfini()+1;
+            for (Objet o : diamants){
+                if (algo.taillePath(grapheSimple.getNoeud(o.getCase()))<dist && algo.taillePath(grapheSimple.getNoeud(o.getCase()))!=0){
+                    dist=algo.taillePath(grapheSimple.getNoeud(o.getCase()));
+                    dest=o.getCase();
+                }
+            }
+        }
+        else{
+            dest=map.caseSortie();
+        }
+        astar.calcul(grapheSimple.getNoeud(this.getCase()), grapheSimple.getNoeud(dest));
+        return dest;
+    }
 }
