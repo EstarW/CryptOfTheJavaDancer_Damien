@@ -6,19 +6,10 @@
 package cryptofthejavadancer.Model.IA;
 
 import cryptofthejavadancer.Model.Carte.Cases.Case;
-import cryptofthejavadancer.Model.Carte.Cases.Case_Sol;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Astar;
-import cryptofthejavadancer.Model.Carte.Graphes.Algorithmes.Dijkstra;
-import cryptofthejavadancer.Model.Carte.Graphes.CoupleNoeud;
-import cryptofthejavadancer.Model.Carte.Graphes.Noeud;
 import cryptofthejavadancer.Model.Carte.Map;
 import cryptofthejavadancer.Model.Entites.Entite;
-import cryptofthejavadancer.Model.Entites.Type_Entite;
-import cryptofthejavadancer.Model.Objet.Objet;
-import cryptofthejavadancer.Model.Objet.Objet_Diamant;
-import cryptofthejavadancer.Model.Objet.Type_Objet;
-
 /**
  *
  * @author dj715494
