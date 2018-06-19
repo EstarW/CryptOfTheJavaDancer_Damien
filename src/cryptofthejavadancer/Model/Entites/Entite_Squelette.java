@@ -2,6 +2,7 @@ package cryptofthejavadancer.Model.Entites;
 
 import cryptofthejavadancer.Controleurs.Controleur.Controleur_Squelette;
 import cryptofthejavadancer.Model.IA.IA_Immobile;
+import cryptofthejavadancer.Model.IA.Monstre.Skeleton.Skeleton_Automaton;
 
 /**
  * Squelette
@@ -15,7 +16,7 @@ public class Entite_Squelette extends Entite_Monstre {
 
     public Entite_Squelette() {
         super(1);
-        this.setIA(new IA_Immobile(this));
+        this.setIA(new Skeleton_Automaton(this));
         this.controleur = null;
     }
     
