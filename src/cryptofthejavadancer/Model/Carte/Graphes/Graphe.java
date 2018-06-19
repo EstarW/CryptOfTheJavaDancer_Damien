@@ -60,4 +60,11 @@ public class Graphe {
         return Noeuds;
     }
     
+    public void replaceCase(Case caseInitiale, Case nouvelleCase){
+        Noeud v = this.getNoeud(caseInitiale);
+        v.setC(nouvelleCase);
+        this.Noeuds.remove(caseInitiale);
+        this.Noeuds.put(nouvelleCase, v);
+    }
+    
 }

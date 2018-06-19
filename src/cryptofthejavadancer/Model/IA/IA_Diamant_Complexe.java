@@ -126,7 +126,7 @@ public class IA_Diamant_Complexe extends IA{
         }
         else if (CaseSuivante.getType() == Type_Case.Mur){
             res=this.directionInteraction(X, Y, CaseSuivante);
-            for(Noeud v : grapheSimple.getNoeuds().values()){
+            /*for(Noeud v : grapheSimple.getNoeuds().values()){
                 if (v.getVoisins().contains(grapheSimple.getNoeud(CaseSuivante))){
                     CoupleNoeud vC = new CoupleNoeud(v,grapheSimple.getNoeud(CaseSuivante));
                     grapheSimple.getLabels().replace(vC,2,1);
@@ -147,10 +147,11 @@ public class IA_Diamant_Complexe extends IA{
             n.setC(test);
             grapheComplexe.getNoeuds().remove(CaseSuivante,v);
             grapheComplexe.getNoeuds().put(test,v);
+            */
         }
         else if (CaseSuivante.getType() == Type_Case.MurDur && hasPelle){
             res=this.directionInteraction(X, Y, CaseSuivante);
-            for(Noeud v : grapheSimple.getNoeuds().values()){
+        /*    for(Noeud v : grapheSimple.getNoeuds().values()){
                 if (v.getVoisins().contains(grapheSimple.getNoeud(CaseSuivante))){
                     CoupleNoeud vC = new CoupleNoeud(v,grapheSimple.getNoeud(CaseSuivante));
                     grapheSimple.getLabels().replace(vC,2,1);
@@ -171,6 +172,8 @@ public class IA_Diamant_Complexe extends IA{
             n.setC(test);
             grapheComplexe.getNoeuds().remove(CaseSuivante,v);
             grapheComplexe.getNoeuds().put(test,v);
+        */
+            
         }
         return res;
     }
@@ -201,7 +204,7 @@ public class IA_Diamant_Complexe extends IA{
                     //System.out.println(astar.getPath());
                     //System.out.println(astar.getDistance());
                     //System.out.println(grapheSimple.getNoeud(pelle.getCase()));
-                    int distCadPelle = astarPelle.taillePath(grapheSimple.getNoeud(pelle.getCase()));
+                    int distCadPelle = astarPelle.taillePath(grapheSimple.getNoeud(pelle.getCase()));       //J'utilise Astar pour raccourcir le trajet
                     //System.out.println("distCadPelle "+distCadPelle);
                     dijkstraComplexe.calcul(grapheComplexe.getNoeud(pelle.getCase()), grapheComplexe.getNoeud(o.getCase()));
                     int distPelleDiam = dijkstraComplexe.taillePath(grapheComplexe.getNoeud(o.getCase()));

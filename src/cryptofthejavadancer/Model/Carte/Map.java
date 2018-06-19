@@ -3,6 +3,7 @@ package cryptofthejavadancer.Model.Carte;
 import cryptofthejavadancer.Model.Carte.Cases.Case;
 import cryptofthejavadancer.Model.Carte.Cases.Type_Case;
 import cryptofthejavadancer.Model.Carte.Graphes.Graphe;
+import cryptofthejavadancer.Model.Carte.Graphes.Noeud;
 import cryptofthejavadancer.Model.Carte.Parseur.Fabrique_Cases;
 import cryptofthejavadancer.Model.Carte.Parseur.Parseur;
 import cryptofthejavadancer.Model.Entites.Entite;
@@ -98,7 +99,15 @@ public class Map {
         Case nouvelleCase = Fabrique_Cases.construireCase(typeNouvelleCase, caseInitiale.getLigne(), caseInitiale.getColonne(), this);
         this.setCase(caseInitiale.getLigne(), caseInitiale.getColonne(), nouvelleCase);
         this.listeCase.remove(caseInitiale);
+        
+        if (this.graphe_simple!=null){
+            this.graphe_simple.replaceCase(caseInitiale, nouvelleCase);
+        }
+        if (this.graphe_complexe!=null){
+            this.graphe_complexe.replaceCase(caseInitiale, nouvelleCase);
+        }
     }
+    
     
     //Ajoute une entité à la position donnée
     public void ajouteEntite(int ligne,int colonne, Entite entite) {

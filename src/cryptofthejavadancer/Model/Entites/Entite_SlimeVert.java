@@ -1,6 +1,7 @@
 package cryptofthejavadancer.Model.Entites;
 
 import cryptofthejavadancer.Model.IA.IA_Immobile;
+import cryptofthejavadancer.Model.IA.MonstreSimple.IA_MonstreSimple;
 
 /**
  * Slime Vert
@@ -12,7 +13,7 @@ public class Entite_SlimeVert extends Entite_Monstre {
 
     public Entite_SlimeVert() {
         super(1);
-        this.setIA(new IA_Immobile(this));
+        this.setIA(new IA_MonstreSimple(this));
     }
     
 //------------------------------------------------------------------------------

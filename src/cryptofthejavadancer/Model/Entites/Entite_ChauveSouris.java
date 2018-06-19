@@ -1,6 +1,7 @@
 package cryptofthejavadancer.Model.Entites;
 
 import cryptofthejavadancer.Model.IA.IA_Immobile;
+import cryptofthejavadancer.Model.IA.MonstreSimple.IA_MonstreSimple;
 
 /**
  * Chauve Souris
