@@ -61,10 +61,16 @@ public class Graphe {
     }
     
     public void replaceCase(Case caseInitiale, Case nouvelleCase){
-        Noeud v = this.getNoeud(caseInitiale);
-        v.setC(nouvelleCase);
+        Noeud n = this.getNoeud(caseInitiale);
+        n.setC(nouvelleCase);
         this.Noeuds.remove(caseInitiale);
-        this.Noeuds.put(nouvelleCase, v);
+        this.Noeuds.put(nouvelleCase, n);
+        for (Noeud v : this.getNoeuds().values()) {
+                if (v.getVoisins().contains(this.getNoeud(nouvelleCase))) {
+                    CoupleNoeud vC = new CoupleNoeud(v, this.getNoeud(nouvelleCase));
+                    this.getLabels().replace(vC, 2, 1);
+                }
+            }
     }
     
 }

@@ -1,6 +1,7 @@
 package cryptofthejavadancer.Model.Entites;
 
 import cryptofthejavadancer.Model.IA.IA_Immobile;
+import cryptofthejavadancer.Model.IA.Monstre.Bat.Bat_Automaton;
 import cryptofthejavadancer.Model.IA.Monstre.MonstreSimple.IA_MonstreSimple;
 
 /**
@@ -13,7 +14,7 @@ public class Entite_ChauveSouris extends Entite_Monstre {
 
     public Entite_ChauveSouris() {
         super(1);
-        this.setIA(new IA_Immobile(this));
+        this.setIA(new Bat_Automaton(this));
     }
     
 //------------------------------------------------------------------------------

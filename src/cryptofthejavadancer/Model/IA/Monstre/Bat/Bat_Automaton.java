@@ -3,32 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cryptofthejavadancer.Model.IA.Monstre.Skeleton;
+package cryptofthejavadancer.Model.IA.Monstre.Bat;
 
 import cryptofthejavadancer.Model.Entites.Entite;
 import cryptofthejavadancer.Model.IA.IA;
-import cryptofthejavadancer.Model.IA.Monstre.Etat;
 import cryptofthejavadancer.Model.IA.Type_Action;
 
 /**
  *
  * @author dj715494
  */
-public class Skeleton_Automaton extends IA{
-    private Etat etatCourant;
+public class Bat_Automaton extends IA{
 
-    public Skeleton_Automaton(Entite _entite) {
+    public Bat_Automaton(Entite _entite) {
         super(_entite);
-        this.etatCourant=new EtatRandom(this);
     }
 
     @Override
     public Type_Action action() {
-        Type_Action res;
-        res=this.etatCourant.agir();
-        this.etatCourant=this.etatCourant.transition();
-        return res;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     
 }
