@@ -14,7 +14,7 @@ public class Entite_ChauveSouris extends Entite_Monstre {
 
     public Entite_ChauveSouris() {
         super(1);
-        this.setIA(new Bat_Automaton(this));
+        this.setIA(new IA_Immobile(this));
     }
     
 //------------------------------------------------------------------------------
